@@ -15,14 +15,14 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Umbraco.Analyzers
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UmbracoAnalyzersCodeFixProvider)), Shared]
-    public class UmbracoAnalyzersCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(SurfaceControllerSuffixCodeFix)), Shared]
+    public class SurfaceControllerSuffixCodeFix : CodeFixProvider
     {
         private const string title = "Make uppercase";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(UmbracoAnalyzersAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(SurfaceControllerSuffixAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

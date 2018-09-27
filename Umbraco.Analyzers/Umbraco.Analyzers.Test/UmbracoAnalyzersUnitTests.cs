@@ -41,7 +41,7 @@ namespace Umbraco.Analyzers.Test
     }";
             var expected = new DiagnosticResult
             {
-                Id = "UmbracoAnalyzers",
+                Id = "UmbracoSurfaceControllerSuffix",
                 Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
@@ -71,12 +71,12 @@ namespace Umbraco.Analyzers.Test
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new UmbracoAnalyzersCodeFixProvider();
+            return new SurfaceControllerSuffixCodeFix();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new UmbracoAnalyzersAnalyzer();
+            return new SurfaceControllerSuffixAnalyzer();
         }
     }
 }

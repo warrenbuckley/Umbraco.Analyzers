@@ -11,9 +11,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace Umbraco.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class UmbracoAnalyzersAnalyzer : DiagnosticAnalyzer
+    public class SurfaceControllerSuffixAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "UmbracoAnalyzers";
+        public const string DiagnosticId = "UmbracoSurfaceControllerSuffix";
 
         // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat.
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
