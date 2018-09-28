@@ -10,15 +10,19 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
 
-namespace Umbraco.Analyzers
+namespace Umbraco.Analyzers.ControllerSuffix
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(SurfaceControllerSuffixCodeFix)), Shared]
-    public class SurfaceControllerSuffixCodeFix : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ControllerSuffixCodeFix)), Shared]
+    public class ControllerSuffixCodeFix : CodeFixProvider
     {
-        private const string title = "Fix SurfaceController - Suffix with 'Controller'";
+        private const string title = "Fix Umbraco Controller - Suffix class name with 'Controller'";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
+            //Can fix for lots of analyzers
+            //SurfaceController
+            //UmbracoApiController, UmbracoAuthorizedApiController, UmbracoAuthorizedJsonController
+            //RenderMvcController
             get { return ImmutableArray.Create(SurfaceControllerSuffixAnalyzer.DiagnosticId); }
         }
     
@@ -50,7 +54,6 @@ namespace Umbraco.Analyzers
 
         private async Task<Solution> AddControllerSuffixAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
         {
-            // Compute new uppercase name.
             var identifierToken = typeDecl.Identifier;
             var newName = $"{identifierToken.Text}Controller";
 

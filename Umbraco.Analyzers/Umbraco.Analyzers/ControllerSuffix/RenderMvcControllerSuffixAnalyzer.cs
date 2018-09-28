@@ -2,12 +2,12 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Umbraco.Analyzers
+namespace Umbraco.Analyzers.ControllerSuffix
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class SurfaceControllerSuffixAnalyzer : DiagnosticAnalyzer
+    public class RenderMvcControllerSuffixAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "Umb001";
+        public const string DiagnosticId = "Umb002";
 
         // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat.
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
@@ -24,7 +24,7 @@ namespace Umbraco.Analyzers
             defaultSeverity: DiagnosticSeverity.Error, 
             isEnabledByDefault: true, 
             description: Description,
-            helpLinkUri: "https://our.umbraco.com/documentation/Reference/Routing/surface-controllers");
+            helpLinkUri: "https://our.umbraco.com/documentation/Reference/Routing/custom-controllers");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -36,18 +36,18 @@ namespace Umbraco.Analyzers
         private void AnalyzeSymbol(SymbolAnalysisContext ctx)
         {
             var namedTypeSymbol = (INamedTypeSymbol)ctx.Symbol;
-            var surfaceCtrlType = ctx.Compilation.GetTypeByMetadataName("Umbraco.Web.Mvc.SurfaceController");
+            var renderMvcCtrlType = ctx.Compilation.GetTypeByMetadataName("Umbraco.Web.Mvc.RenderMvcController");
 
             var baseType = namedTypeSymbol.BaseType;
 
-            if (baseType.Equals(surfaceCtrlType) == false)
+            if (baseType.Equals(renderMvcCtrlType) == false)
             {
                 return;
             }
 
-            //We have a class type that inherits/basetype that uses SurfaceController
+            //We have a class type that inherits/basetype that uses RenderMvcController
             //Now lets check the name of the type - check it ends with 'controller'
-            if(namedTypeSymbol.Name.ToLowerInvariant().EndsWith("controller"))
+            if (namedTypeSymbol.Name.ToLowerInvariant().EndsWith("controller"))
             {
                 return;
             }
