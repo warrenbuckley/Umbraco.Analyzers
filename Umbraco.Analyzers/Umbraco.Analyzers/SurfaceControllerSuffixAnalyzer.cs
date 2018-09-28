@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Threading;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Umbraco.Analyzers
@@ -13,7 +7,7 @@ namespace Umbraco.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SurfaceControllerSuffixAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "UmbracoSurfaceControllerSuffix";
+        public const string DiagnosticId = "Umb001";
 
         // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat.
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
@@ -22,30 +16,44 @@ namespace Umbraco.Analyzers
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private const string Category = "Naming";
 
-        private static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        private static DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+            id: DiagnosticId, 
+            title: Title, 
+            messageFormat: MessageFormat, 
+            category: Category, 
+            defaultSeverity: DiagnosticSeverity.Error, 
+            isEnabledByDefault: true, 
+            description: Description,
+            helpLinkUri: "https://our.umbraco.com/documentation/Reference/Routing/surface-controllers");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
         public override void Initialize(AnalysisContext context)
         {
-            // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
-            // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-            context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+            context.RegisterSymbolAction(ctx => AnalyzeSymbol(ctx), SymbolKind.NamedType);
         }
 
-        private static void AnalyzeSymbol(SymbolAnalysisContext context)
+        private void AnalyzeSymbol(SymbolAnalysisContext ctx)
         {
-            // TODO: Replace the following code with your own analysis, generating Diagnostic objects for any issues you find
-            var namedTypeSymbol = (INamedTypeSymbol)context.Symbol;
+            var namedTypeSymbol = (INamedTypeSymbol)ctx.Symbol;
+            var surfaceCtrlType = ctx.Compilation.GetTypeByMetadataName("Umbraco.Web.Mvc.SurfaceController");
 
-            // Find just those named type symbols with names containing lowercase letters.
-            if (namedTypeSymbol.Name.ToCharArray().Any(char.IsLower))
+            var baseType = namedTypeSymbol.BaseType;
+
+            if (baseType.Equals(surfaceCtrlType) == false)
             {
-                // For all such symbols, produce a diagnostic.
-                var diagnostic = Diagnostic.Create(Rule, namedTypeSymbol.Locations[0], namedTypeSymbol.Name);
-
-                context.ReportDiagnostic(diagnostic);
+                return;
             }
-        }
+
+            //We have a class type that inherits/basetype that uses SurfaceController
+            //Now lets check the name of the type - check it ends with 'controller'
+            if(namedTypeSymbol.Name.ToLowerInvariant().EndsWith("controller"))
+            {
+                return;
+            }
+
+            //Lets report a diagnostic
+            ctx.ReportDiagnostic(Diagnostic.Create(Rule, namedTypeSymbol.Locations[0], namedTypeSymbol.Name));
+        }        
     }
 }

@@ -9,16 +9,16 @@
   <PropertyGroup>
     <PackageId>Umbraco.Analyzers</PackageId>
     <PackageVersion>1.0.0.0</PackageVersion>
-    <Authors>warre</Authors>
+    <Authors>Umbraco HQ</Authors>
     <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
     <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
     <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
     <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Umbraco.Analyzers</Description>
+    <Description>Umbraco.Analyzers is used to give advice and insights into your code and provide codefixes in Visual Studio with lightbulbs</Description>
     <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
     <Copyright>Copyright</Copyright>
-    <PackageTags>Umbraco.Analyzers, analyzers</PackageTags>
+    <PackageTags>Umbraco.Analyzers, analyzers, roslyn, umbraco, umbraco cms,</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
