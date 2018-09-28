@@ -1,6 +1,14 @@
 # Umbraco Analyzers
 Roslyn Analyzers and CodeFixes to help guide users building websites with Umbraco inside the Visual Studio IDE
 
+## Analyzers
+* **Umb001** - `SurfaceController` class name is not suffixed with Controller
+* **Umb002** - `RenderMvcController` class name is not suffixed with Controller
+* **Umb003** - Various API Controller's `UmbracoApiController`,  `UmbracoAuthorizedApiController`, `UmbracoAuthorizedJsonController` class name is not suffixed with Controller
+
+## Fixes
+* Adds **Controller** Suffix to classes that inherit from classes that would need the class name to have controller suffixed due to Umbraco default routing based on general MVC naming conventions, used by error codes Umb001, Umb002 & Umb003
+
 ## Ideas to implement
 - [ ] Avoid useage of Singlton access of UmbracoContext or ApplicationContext - especially when it is in a base class
 - [ ] If GetAncestors() chained with GetDescendants() - throw a Warning. ARE YOU SURE? *Can we monitor RAZOR files?*
